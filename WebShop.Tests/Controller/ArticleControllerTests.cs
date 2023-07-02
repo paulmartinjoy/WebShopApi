@@ -40,6 +40,23 @@ namespace WebShop.Tests.Controller
         }
 
         [Fact]
+        public async Task ArticlesController_GetArticleById_ReturnOK()
+        {
+            //Arrange
+            var id = 1;
+            var article = A.Fake<Article>();
+            var articleDto = A.Fake<ArticleDto>();
+            A.CallTo(() => _mapper.Map<ArticleDto>(article)).Returns(articleDto);
+            var controller = new ArticlesController(_mapper, _articlesRepository);
+
+            //Act
+            var result = await controller.GetArticle(1);
+
+            //Assert
+            result.Result.Should().BeOfType<OkObjectResult>();
+        }
+        
+        [Fact]
         public async Task ArticlesController_PostArticle_CreatedAtAction()
         {
             //Arrange

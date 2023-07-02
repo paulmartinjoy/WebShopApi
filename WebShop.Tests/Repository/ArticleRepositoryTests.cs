@@ -1,6 +1,11 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FakeItEasy;
+using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebShop.Contracts;
 using WebShop.Data;
+using WebShop.Models.Articles;
 using WebShop.Repository;
 using Xunit;
 
@@ -8,6 +13,12 @@ namespace WebShop.Tests.Repository
 {
     public class ArticleRepositoryTests
     {
+        private readonly IMapper _mapper;
+        public ArticleRepositoryTests()
+        {
+            _mapper = A.Fake<IMapper>();
+        }
+
         private async Task<ApplicationDbContext> GetDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -41,7 +52,6 @@ namespace WebShop.Tests.Repository
             //Arrange
             var article = new Article
             {
-                Id = 2,
                 Name = "Slim leg Jeans",
                 Season = "202301",
                 CollectionType = 15,
@@ -91,6 +101,25 @@ namespace WebShop.Tests.Repository
             //Assert
             result.Should().NotBeNull();
             result.Should().BeOfType<List<Article>>();
-        }     
+        }
+
+
+        [Fact]
+        public async void ArticleRepository_GetArticle_ReturnsArticle()
+        {
+            //Arrange
+            int articleId = 1;
+            var dbContext = await GetDbContext();
+            var articleRepository = new ArticlesRepository(dbContext);
+            var article = A.Fake<Article>();
+            var articleDto = A.Fake<ArticleDto>();
+            A.CallTo(() => _mapper.Map<ArticleDto>(article)).Returns(articleDto);
+
+            //Act
+            var result = await articleRepository.GetAsync(articleId);
+
+            //Assert
+            result.Should().BeOfType<Article>();
+        }
     }
 }
