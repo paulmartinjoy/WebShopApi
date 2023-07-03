@@ -103,4 +103,4 @@ Make sure to set these environment variables before running the API.
 
 ### More Info
 
-Only users with administratror rights are allowed to add articles, colorinfos and variantinfos. But inorder for the end point to work, the user has to be made an administrator manually in the database. An administrator registration endpoint can be the next step to do it. 
+Only users with administratror rights are allowed to add articles, colorinfos and variantinfos. But inorder to make the end points work, the user has to be made an administrator manually in the database. An administrator registration endpoint can be the next step to do it. 
